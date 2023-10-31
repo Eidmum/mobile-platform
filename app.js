@@ -3,6 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const tempRouter = require("./routers/tempRouter");
+const ledRouter = require("./routers/ledRouter");
 const humidityRouter = require("./routers/humidityRouter");
 
 const app = express();
@@ -34,4 +35,5 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/temp", tempRouter);
 app.use("/api/v1/humidity", humidityRouter);
+app.use("/api/v1/led", ledRouter);
 module.exports = app;
