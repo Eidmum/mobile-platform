@@ -1,7 +1,7 @@
 const { json } = require("body-parser");
 const express = require("express");
 const morgan = require("morgan");
-const cors=require('cors');
+const cors = require("cors");
 const tempRouter = require("./routers/tempRouter");
 const humidityRouter = require("./routers/humidityRouter");
 
@@ -10,8 +10,6 @@ app.use(cors());
 
 //middlewares
 app.use(express.json());
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 app.use((req, res, next) => {
   console.log("hello from my middleware");
