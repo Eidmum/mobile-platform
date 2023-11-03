@@ -7,6 +7,6 @@ exports.getState = async (req, res) => {
 exports.updateState = async (req, res) => {
   console.log(req.body);
   const a = await Fan.updateOne({ name: req.body.name }, { $set: req.body });
-  console.log(a);
+
   res.status(200).json({ message: "successfull" });
 };
