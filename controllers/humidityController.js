@@ -14,28 +14,15 @@ exports.checkBody = (req, res, next) => {
 };
 
 //getting all the humidity
-exports.getAllHumidity = async (req, res) => {
-  try {
-    const humidities = await Humidity.find();
-    res.status(200).json(humidities);
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      err: err,
-    });
-  }
-};
+
 //get humidity by id
 exports.getHumidity = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
   try {
-    const humidity = await Humidity.findOne({ _id: req.params.id });
-    res.status(200).json({
-      status: "successfull",
-      results: 1,
-      data: {
-        humidity,
-      },
-    });
+    const humidity = await Humidity.find({ userId: id });
+    console.log(humidity);
+    res.status(200).json(humidity);
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -47,15 +34,15 @@ exports.getHumidity = async (req, res) => {
 exports.postHumidity = async (req, res) => {
   try {
     const newHumidity = new Humidity(req.body);
-    newHumidity.time=new Date().toISOString();
+    const id = req.params.id;
+    console.log(id);
+    let timeString = new Date().toISOString().split("T");
+
+    newHumidity.time = timeString[1];
+    newHumidity.date = timeString[0];
+    newHumidity.userId = id;
     const humidity = await newHumidity.save();
-    res.status(201).json({
-      status: "success",
-      results: 1,
-      data: {
-        humidity: newHumidity,
-      },
-    });
+    res.status(201).json(humidity);
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -64,35 +51,3 @@ exports.postHumidity = async (req, res) => {
   }
 };
 //update humidity
-exports.updateHumidity = async (req, res) => {
-  try {
-    const humidity = await Humidity.updateOne({ _id: req.params.id }, req.body);
-    res.status(200).json({
-      status: "success",
-      data: {
-        humidity,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      err,
-    });
-  }
-};
-
-//delete humidity
-exports.deleteHumidity = async (req, res) => {
-  try {
-    await Humidity.deleteOne({ _id: req.params.id });
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      err: err,
-    });
-  }
-};

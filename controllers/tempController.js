@@ -10,30 +10,15 @@ exports.checkBody = (req, res, next) => {
   }
   next();
 };
-//get all the temps
-exports.getAllTemp = async (req, res) => {
-  try {
-    const temps = await Temp.find();
-    res.status(200).json(temps);
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      err: err,
-    });
-  }
-};
 
 //get temp by the id
-exports.getTemp = async (req, res) => {
+exports.getAllTemp = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
   try {
-    const temp = await Temp.findOne({ _id: req.params.id });
-    res.status(200).json({
-      status: "successfull",
-      results: 1,
-      data: {
-        temp,
-      },
-    });
+    const temps = await Temp.find({ userId: id });
+    console.log(temps);
+    res.status(200).json(temps);
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -45,8 +30,14 @@ exports.getTemp = async (req, res) => {
 exports.postTemp = async (req, res) => {
   try {
     const newTemp = new Temp(req.body);
-    console.log(req.body);
-    newTemp.time=new Date().toISOString();
+    const id = req.params.id;
+    console.log(id);
+    let timeString = new Date().toISOString().split("T");
+
+    newTemp.time = timeString[1];
+    newTemp.date = timeString[0];
+
+    newTemp.userId = id;
     const temp = await newTemp.save();
     res.status(201).json({
       status: "success",
@@ -59,40 +50,6 @@ exports.postTemp = async (req, res) => {
     res.status(404).json({
       status: "fail",
       err,
-    });
-  }
-};
-
-//update the temp
-exports.updateTemp = async (req, res) => {
-  try {
-    const temp = await Temp.updateOne({ _id: req.params.id }, req.body);
-    res.status(200).json({
-      status: "success",
-      data: {
-        temp,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      err,
-    });
-  }
-};
-
-//delete temp
-exports.deleteTemp = async (req, res) => {
-  try {
-    await Temp.deleteOne({ _id: req.params.id });
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      err: err,
     });
   }
 };

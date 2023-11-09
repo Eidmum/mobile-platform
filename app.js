@@ -38,4 +38,5 @@ app.use("/api/v1/temp", tempRouter);
 app.use("/api/v1/humidity", humidityRouter);
 app.use("/api/v1/light", ledRouter);
 app.use("/api/v1/fan", fanRouter);
+
 module.exports = app;

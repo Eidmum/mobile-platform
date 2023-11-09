@@ -3,14 +3,8 @@ const router = express.Router();
 const tempController = require("../controllers/tempController");
 
 router
-  .route("/")
+  .route("/:id")
   .get(tempController.getAllTemp)
   .post(tempController.checkBody, tempController.postTemp);
-
-router
-  .route("/:id")
-  .get(tempController.getTemp)
-  .patch(tempController.updateTemp)
-  .delete(tempController.deleteTemp);
 
 module.exports = router;
